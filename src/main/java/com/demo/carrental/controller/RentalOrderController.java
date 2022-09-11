@@ -2,10 +2,13 @@ package com.demo.carrental.controller;
 
 
 import com.demo.carrental.common.ErrorCode;
+import com.demo.carrental.common.RequestHolder;
 import com.demo.carrental.common.Result;
 import com.demo.carrental.model.RentalRequest;
 import com.demo.carrental.service.IRentalOrderService;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,7 +32,6 @@ public class RentalOrderController extends BaseController {
     private IRentalOrderService rentalOrderService;
 
     @PostMapping("/rent/car")
-
     public Result rentACar(@RequestBody @Validated RentalRequest request){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime maxTime = now.plusMonths(1);
@@ -43,10 +45,18 @@ public class RentalOrderController extends BaseController {
             return Result.fail(ErrorCode.INVALID_PARAMS, "end time should be in one month");
         }
 
+        Integer customerId = Integer.valueOf(RequestHolder.getUserId());
+
         return rentalOrderService.rentACar(
                 request.getCarCategoryId(),
-                request.getCustomerId(),
+                customerId,
                 startTime, endTime);
 
+    }
+
+    @GetMapping("/rent/getOrders")
+    public Result getOrders(){
+        Integer customerId = Integer.valueOf(RequestHolder.getUserId());
+        return rentalOrderService.getOrderList(customerId);
     }
 }

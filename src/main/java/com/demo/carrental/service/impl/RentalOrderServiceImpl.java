@@ -1,5 +1,6 @@
 package com.demo.carrental.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.demo.carrental.common.ErrorCode;
 import com.demo.carrental.common.Result;
 import com.demo.carrental.entity.RentalOrder;
@@ -49,5 +50,13 @@ public class RentalOrderServiceImpl extends ServiceImpl<RentalOrderMapper, Renta
             return Result.success();
         }
         return Result.fail(ErrorCode.NORMAL_ERROR);
+    }
+
+    @Override
+    public Result getOrderList(Integer customerId){
+        LambdaQueryWrapper<RentalOrder> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(RentalOrder::getCustomerId, customerId);
+        List<RentalOrder> list = this.baseMapper.selectList(wrapper);
+        return Result.success(list);
     }
 }

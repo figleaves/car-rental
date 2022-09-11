@@ -37,11 +37,11 @@ public class JwtTokenUtil {
     private RedisTemplate<String, String> redisTemplate;
 
     public String createToken(Customer customer){
-        return createToken(customer.getId(), customer.getEmail());
+        return createToken(String.valueOf(customer.getId()), customer.getEmail());
     }
 
 
-    public String createToken(int userId, String userName){
+    public String createToken(String userId, String userName){
         String token = redisTemplate.opsForValue().get(prefix+userId);
         if (StringUtils.isNotEmpty(token)){
             renewToken(token, String.valueOf(userId), expire);
@@ -51,13 +51,13 @@ public class JwtTokenUtil {
         Date nowDate = new Date();
 
         token = Jwts.builder()
-                .setId(String.valueOf(userId))
+                .setId(userId)
                 .setSubject(userName)
                 .setIssuedAt(nowDate)
                 .signWith(getKey(), signatureAlgorithm)
                 .compact();
 
-        redisTemplate.opsForValue().set(token, "token", expire, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(token, userId, expire, TimeUnit.MINUTES);
         redisTemplate.opsForValue().set(prefix+userId, token, expire, TimeUnit.MINUTES);
         return token;
     }

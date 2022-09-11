@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.demo.carrental.common.BusException;
 import com.demo.carrental.common.ErrorCode;
 import com.demo.carrental.common.JwtTokenUtil;
+import com.demo.carrental.common.RequestHolder;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -42,6 +43,7 @@ public class TokenFilter implements HandlerInterceptor {
         }
 
         if (jwtTokenUtil.checkAndRenewTokenExpiration(token, claims.getId())){
+            RequestHolder.setUserId(request, claims.getId());
             return true;
         } else {
             throw new BusException(ErrorCode.TOKEN_EXPIRED);

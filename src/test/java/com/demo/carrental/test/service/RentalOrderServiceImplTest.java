@@ -28,7 +28,7 @@ public class RentalOrderServiceImplTest {
 
     @Test
     @Transactional
-    public void rentACar() {
+    public void testRentACar() {
         Integer customerId = 1;
         Integer categoryId = 2;
         LocalDateTime now = LocalDateTime.now();
@@ -43,7 +43,7 @@ public class RentalOrderServiceImplTest {
 
     @Test
     @Transactional
-    public void getCarIdList() {
+    public void testGetAvailableCarIdList() {
         Integer customerId = 1;
         Integer carCategoryId = 1;
         LocalDateTime now = LocalDateTime.now();
@@ -75,4 +75,24 @@ public class RentalOrderServiceImplTest {
         assertEquals(0, carIds.size());
     }
 
+    @Test
+    @Transactional
+    public void testGetOrderList(){
+        Integer customerId = 1;
+        Integer categoryId = 2;
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startTime = now.plusWeeks(3);
+        LocalDateTime endTime = now.plusWeeks(4);
+
+        Result result = rentalOrderService.rentACar(categoryId, customerId, startTime, endTime);
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.getSuccess());
+
+        result = rentalOrderService.getOrderList(customerId);
+        Assert.assertNotNull(result);
+        Assert.assertTrue(result.getSuccess());
+        Assert.assertNotNull(result.getData());
+        Assert.assertTrue(result.getData() instanceof List);
+        Assert.assertEquals(1, ((List<?>) result.getData()).size());
+    }
 }
