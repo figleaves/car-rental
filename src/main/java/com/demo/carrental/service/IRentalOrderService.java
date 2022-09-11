@@ -21,4 +21,6 @@ public interface IRentalOrderService extends IService<RentalOrder> {
     List<Integer> getAvailableCarIdList(Integer categoryId, LocalDateTime startTime, LocalDateTime endTime);
 
     Result rentACar(Integer categoryId, Integer customerId, LocalDateTime startTime, LocalDateTime endTime);
+
+    Result getOrderList(Integer customerId);
 }

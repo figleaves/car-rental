@@ -12,9 +12,6 @@ public class RentalRequest  implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @NotNull(message="customerId cannot be null")
-    private Integer customerId;
-
     @NotNull(message="carCategoryId cannot be null")
     private Integer carCategoryId;
 

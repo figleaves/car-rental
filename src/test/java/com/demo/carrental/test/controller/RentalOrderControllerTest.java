@@ -41,6 +41,8 @@ public class RentalOrderControllerTest {
     @Resource
     ICustomerService customerService;
 
+    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     String token;
 
     @Before
@@ -61,7 +63,7 @@ public class RentalOrderControllerTest {
 
     @Test
     @Transactional
-    public void rentACar() throws Exception {
+    public void testRentACar() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
         rootNode.put("customerId", 1);
@@ -81,37 +83,28 @@ public class RentalOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"));
     }
 
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     @Test
     @Transactional
-    public void rentACarInvalidCustomerId() throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode rootNode = mapper.createObjectNode();
-        rootNode.put("customerId", "");
-        rootNode.put("carCategoryId", 1);
-        LocalDateTime now = LocalDateTime.now();
+    public void testGetOrders() throws Exception {
+        testRentACar();
 
-        rootNode.put("startTime", now.plusDays(1).format(formatter));
-        rootNode.put("endTime", now.plusDays(1).format(formatter));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.get("/rent/getOrders")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
-                .content(rootNode.toString())
         ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value("false"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(ErrorCode.INVALID_PARAMS.getErrorCode()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("customerId cannot be null"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value("true"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("ok"));
     }
+
+
+
 
     @Test
     @Transactional
     public void rentACarInvalidCarCategoryId() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
-        rootNode.put("customerId", 1);
         rootNode.put("carCategoryId", "");
         LocalDateTime now = LocalDateTime.now();
 
@@ -134,7 +127,6 @@ public class RentalOrderControllerTest {
     public void rentACarInvalidStartTime() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
-        rootNode.put("customerId", 1);
         rootNode.put("carCategoryId", 1);
         LocalDateTime now = LocalDateTime.now();
 
@@ -167,7 +159,6 @@ public class RentalOrderControllerTest {
     public void rentACarInvalidEndTime() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rootNode = mapper.createObjectNode();
-        rootNode.put("customerId", 1);
         rootNode.put("carCategoryId", 1);
         LocalDateTime now = LocalDateTime.now();
 
