@@ -4,6 +4,7 @@ package com.demo.carrental.controller;
 import com.demo.carrental.common.Result;
 import com.demo.carrental.service.ICarCategoryService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
  * @since 2022-09-09
  */
 @RestController
+@RequestMapping(value = "/carRental")
 public class CarCategoryController extends BaseController {
 
     @Resource

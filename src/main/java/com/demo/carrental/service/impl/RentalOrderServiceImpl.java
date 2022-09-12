@@ -47,7 +47,7 @@ public class RentalOrderServiceImpl extends ServiceImpl<RentalOrderMapper, Renta
         order.setEndTime(endTime);
         int res = this.baseMapper.insert(order);
         if (res > 0){
-            return Result.success();
+            return Result.success(res);
         }
         return Result.fail(ErrorCode.NORMAL_ERROR);
     }

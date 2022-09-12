@@ -1,6 +1,7 @@
 package com.demo.carrental.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -15,6 +16,15 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(tokenFilter)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/customer/login");
+                .excludePathPatterns("/carRental/customer/login");
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedHeaders("*")
+                .allowedOriginPatterns("*")
+                .allowCredentials(true)
+                .allowedMethods("*");//"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"
     }
 }
