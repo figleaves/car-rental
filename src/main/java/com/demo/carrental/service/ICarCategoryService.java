@@ -4,6 +4,8 @@ import com.demo.carrental.common.Result;
 import com.demo.carrental.entity.CarCategory;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * car category table 服务类
@@ -14,5 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICarCategoryService extends IService<CarCategory> {
 
-    Result getCarCategoryList();
+    Result<List<CarCategory>> getCarCategoryList();
 }

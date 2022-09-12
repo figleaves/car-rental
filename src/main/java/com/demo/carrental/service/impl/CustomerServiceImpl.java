@@ -29,7 +29,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     private JwtTokenUtil jwtTokenUtil;
 
     @Override
-    public Result login(LoginRequest request) {
+    public Result<String> login(LoginRequest request) {
         String email = request.getEmail();
         Customer customer = getCustomer(email);
         if (null == customer) {

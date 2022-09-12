@@ -15,5 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ICustomerService extends IService<Customer> {
 
-    Result login(LoginRequest request);
+    Result<String> login(LoginRequest request);
 }

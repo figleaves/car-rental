@@ -53,7 +53,7 @@ public class RentalOrderServiceImpl extends ServiceImpl<RentalOrderMapper, Renta
     }
 
     @Override
-    public Result getOrderList(Integer customerId){
+    public Result<List<RentalOrder>> getOrderList(Integer customerId){
         LambdaQueryWrapper<RentalOrder> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(RentalOrder::getCustomerId, customerId);
         List<RentalOrder> list = this.baseMapper.selectList(wrapper);
