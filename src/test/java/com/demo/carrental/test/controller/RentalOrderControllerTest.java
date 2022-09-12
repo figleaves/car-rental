@@ -73,7 +73,7 @@ public class RentalOrderControllerTest {
         rootNode.put("startTime", now.plusDays(1).format(formatter));
         rootNode.put("endTime", now.plusDays(10).format(formatter));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
                 .content(rootNode.toString())
@@ -88,7 +88,7 @@ public class RentalOrderControllerTest {
     public void testGetOrders() throws Exception {
         testRentACar();
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/rent/getOrders")
+        mockMvc.perform(MockMvcRequestBuilders.get("/carRental/rent/getOrders")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
         ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -111,7 +111,7 @@ public class RentalOrderControllerTest {
         rootNode.put("startTime", now.plusDays(1).format(formatter));
         rootNode.put("endTime", now.plusDays(1).format(formatter));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
                 .content(rootNode.toString())
@@ -130,10 +130,25 @@ public class RentalOrderControllerTest {
         rootNode.put("carCategoryId", 1);
         LocalDateTime now = LocalDateTime.now();
 
-        rootNode.put("startTime", now.plusDays(31).format(formatter));
-        rootNode.put("endTime", now.plusDays(1).format(formatter));
+        // using paste datetime
+        rootNode.put("startTime", now.minusDays(3).format(formatter));
+        rootNode.put("endTime", now.plusDays(3).format(formatter));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("token", token)
+                .content(rootNode.toString())
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value("false"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(ErrorCode.INVALID_PARAMS.getErrorCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("start time should be in one month"));
+
+        // using more than 30 days in future
+        rootNode.put("startTime", now.plusDays(31).format(formatter));
+        rootNode.put("endTime", now.plusDays(32).format(formatter));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
                 .content(rootNode.toString())
@@ -144,7 +159,7 @@ public class RentalOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("start time should be in one month"));
 
         rootNode.put("startTime", "1");
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
                 .content(rootNode.toString())
@@ -165,7 +180,7 @@ public class RentalOrderControllerTest {
         rootNode.put("startTime", now.plusDays(1).format(formatter));
         rootNode.put("endTime", now.plusDays(35).format(formatter));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
                 .content(rootNode.toString())
@@ -176,7 +191,7 @@ public class RentalOrderControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("end time should be in one month"));
 
         rootNode.put("endTime", "1");
-        mockMvc.perform(MockMvcRequestBuilders.post("/rent/car")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .header("token", token)
                 .content(rootNode.toString())
@@ -184,5 +199,28 @@ public class RentalOrderControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.success").value("false"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(ErrorCode.ERROR.getErrorCode()));
+    }
+
+    @Test
+    @Transactional
+    public void rentACarStartBiggerThanEndDatetime() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode rootNode = mapper.createObjectNode();
+        rootNode.put("carCategoryId", 1);
+        LocalDateTime now = LocalDateTime.now();
+
+        rootNode.put("startTime", now.plusDays(1).format(formatter));
+        rootNode.put("endTime", now.plusDays(1).format(formatter));
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/rent/car")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("token", token)
+                .content(rootNode.toString())
+        ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.success").value("false"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.code").value(ErrorCode.INVALID_PARAMS.getErrorCode()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("start time should before end time more than 1 day"));
+
     }
 }

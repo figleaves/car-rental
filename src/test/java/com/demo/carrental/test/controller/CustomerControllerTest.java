@@ -44,7 +44,7 @@ public class CustomerControllerTest {
         rootNode.put("email", "sveneigdoglas@exmaple.com");
         rootNode.put("password", "eyJhbGciOi");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/customer/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(rootNode.toString())
         ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -59,7 +59,7 @@ public class CustomerControllerTest {
         rootNode.put("email", "sveneigdoglas@exmaple.com");
         rootNode.put("password", "");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/customer/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(rootNode.toString())
         ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
@@ -75,7 +75,7 @@ public class CustomerControllerTest {
         rootNode.put("email", "sveneigdoglasxmaple.com");
         rootNode.put("password", "123456");
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/customer/login")
+        mockMvc.perform(MockMvcRequestBuilders.post("/carRental/customer/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(rootNode.toString())
         ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
