@@ -15,14 +15,19 @@ public class WebConfig implements WebMvcConfigurer {
 
     public void addInterceptors(InterceptorRegistry registry){
         registry.addInterceptor(tokenFilter)
-                .addPathPatterns("/**")
-                .excludePathPatterns("/carRental/customer/login");
+                .addPathPatterns("/carRental/**")
+                .excludePathPatterns(
+                        "/carRental/customer/login");
+//                        "/swagger-ui");
+//                        "/v2/**",
+//                        "/swagger-resources/**");
     }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedHeaders("*")
+//                .allowedOrigins("*")
                 .allowedOriginPatterns("*")
                 .allowCredentials(true)
                 .allowedMethods("*");//"GET", "HEAD", "POST", "PUT", "DELETE", "OPTIONS"

@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
 
+    SUCCESS(200, "success"),
     ERROR(1001, "backend system error"),
     NORMAL_ERROR(1002, "operation failed"),
     INVALID_PARAMS(1003, "invalid param"),

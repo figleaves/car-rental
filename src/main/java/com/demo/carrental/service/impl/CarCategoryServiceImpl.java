@@ -1,6 +1,7 @@
 package com.demo.carrental.service.impl;
 
 import com.demo.carrental.common.Result;
+import com.demo.carrental.entity.Car;
 import com.demo.carrental.mapper.CarCategoryMapper;
 import com.demo.carrental.service.ICarCategoryService;
 import com.demo.carrental.entity.CarCategory;
@@ -22,7 +23,7 @@ import java.util.List;
 public class CarCategoryServiceImpl extends ServiceImpl<CarCategoryMapper, CarCategory> implements ICarCategoryService {
 
     @Override
-    public Result getCarCategoryList() {
+    public Result<List<CarCategory>> getCarCategoryList() {
         QueryWrapper<CarCategory> queryWrapper = new QueryWrapper<>();
         List<CarCategory> list = this.baseMapper.selectList(queryWrapper);
         return Result.success(list);

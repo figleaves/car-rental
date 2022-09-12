@@ -3,7 +3,7 @@ package com.demo.carrental.common;
 import lombok.Data;
 
 @Data
-public class Result {
+public class Result<T> {
 
     private int code;
 
@@ -11,42 +11,42 @@ public class Result {
 
     private Boolean success;
 
-    private Object data;
+    private T data;
 
-    public static Result success(){
-        return success("ok", null);
+    public static <T> Result<T> success(){
+        return success(ErrorCode.SUCCESS.getErrorMsg(), null);
     }
 
-    public static Result success(Object data){
-        return success("ok", data);
+    public static <T> Result<T> success(T data){
+        return success(ErrorCode.SUCCESS.getErrorMsg(), data);
     }
 
-    public static Result success(String msg, Object data){
-        Result r = new Result();
+    public static <T> Result<T> success(String msg, T data){
+        Result<T> r = new Result<T>();
         r.setSuccess(true);
-        r.setCode(1000);
+        r.setCode(ErrorCode.SUCCESS.getErrorCode());
         r.setData(data);
         r.setMessage(msg);
         return r;
     }
 
-    public static Result fail(int code, String msg){
-        Result r = new Result();
+    public static <T> Result<T> fail(int code, String msg){
+        Result<T> r = new Result<T>();
         r.setSuccess(false);
         r.setCode(code);
         r.setMessage(msg);
         return r;
     }
 
-    public static Result fail(ErrorCode errorCode){
+    public static <T> Result<T> fail(ErrorCode errorCode){
         return fail(errorCode.getErrorCode(), errorCode.getErrorMsg());
     }
 
-    public static Result fail(ErrorCode errorCode, String msg){
+    public static <T> Result<T> fail(ErrorCode errorCode, String msg){
         return fail(errorCode.getErrorCode(), msg);
     }
 
-    public static Result fail(String msg){
+    public static <T> Result<T> fail(String msg){
         return fail(ErrorCode.NORMAL_ERROR, msg);
     }
 }

@@ -3,6 +3,9 @@ package com.demo.carrental.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
  * @author baomidou
  * @since 2022-09-09
  */
+@ApiModel
 @TableName("table_car_category")
 public class CarCategory implements Serializable {
 
@@ -23,6 +27,7 @@ public class CarCategory implements Serializable {
     /**
      * ID
      */
+    @ApiModelProperty(value = "carCategoryId")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
@@ -33,6 +38,7 @@ public class CarCategory implements Serializable {
      */
     private String description;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="UTC")
     private LocalDateTime createTime;
 
     public Integer getId() {
