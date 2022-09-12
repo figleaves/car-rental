@@ -37,7 +37,7 @@ public class RentalOrderServiceImpl extends ServiceImpl<RentalOrderMapper, Renta
                             LocalDateTime startTime, LocalDateTime endTime){
         List<Integer> carIds = getAvailableCarIdList(categoryId, startTime, endTime);
         if (carIds.isEmpty()){
-            return Result.fail("no available car of the chosen car model");
+            return Result.fail("no available car of the car model, please choose datetime or model again");
         }
         RentalOrder order = new RentalOrder();
         order.setCarId(carIds.get(0));

@@ -54,7 +54,7 @@ public class CarCategoryControllerTest {
 
     @Test
     public void getCarCategoryList() throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.get("/carCategory/list")
+        mockMvc.perform(MockMvcRequestBuilders.get("/carRental/carCategory/list")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .header("token", token)
                     ).andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
